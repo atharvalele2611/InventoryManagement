@@ -1,0 +1,9 @@
+<div class = "update">
+    <h1>Update Item</h1>
+    <div class = "form">
+        <form action="/update/{{item.id}}" method="POST"> 
+            <input type="text" name="item" id="item" value = "{{item.content}}">
+            <input type="submit" value="Update Item">
+        </form>
+    </div>
+</div>
