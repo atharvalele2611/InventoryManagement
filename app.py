@@ -1,3 +1,11 @@
+"""
+file: app.py
+description: A Basic CRUD app which lets you add, edit, delete items in your inventory. Also, it lets your export 
+            your inventory in an csv file.
+language: python3
+author: Atharva Lele, al8523@rit.edu, atharva.lele09@gmail.com
+
+"""
 from io import StringIO
 from flask import Flask, make_response, render_template, request, redirect, send_file
 from flask_sqlalchemy import SQLAlchemy
@@ -20,6 +28,11 @@ class InventoryDB(db.Model):
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+    """
+    Route to the home page.
+    If the request method is POST, it means that the user has added a new item in the inventory.
+    Else we just get the list and display.
+    """
     if request.method == "POST":
         item_content = request.form.get("item")
         new_item = InventoryDB(content=item_content)
@@ -36,6 +49,9 @@ def home():
 
 @app.route("/delete/<int:id>")
 def delete(id):
+    """
+    Delete route for the item. Flow is invoked when user presses delete
+    """
     del_id = InventoryDB.query.get_or_404(id)
     InventoryDB.query
     try:
@@ -48,6 +64,9 @@ def delete(id):
 
 @app.route("/update/<int:id>", methods=["GET", "POST"])
 def update(id):
+    """
+    Update flow for the item. Flow is invoked when user presses update.
+    """
     up_id = InventoryDB.query.get_or_404(id)
     if request.method == "POST":
         up_id.content = request.form.get("item")
@@ -62,6 +81,11 @@ def update(id):
 
 @app.route("/export")
 def export():
+    """
+    export flow for the item. Flow is invoked when user presses Export.
+    This gets a list of the items stored in the database, adds it to a csv file and downloads it into the user's
+    hard drive.
+    """
     items = db.session.query(InventoryDB.content).all()
     si = StringIO()
     writer = csv.writer(si)
